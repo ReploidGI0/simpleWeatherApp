@@ -27,14 +27,15 @@ const initialState = {
 export default function useWeather() {
 
     const [weather, setWeather] = useState<Weather>(initialState)
-
     const [loading, setLoading] = useState(false)
+    const [notFound, setNotFound] = useState(false)
 
     const fetchWeather = async (search: SearchType) => {
 
         const appid = import.meta.env.VITE_API_KEY
         setLoading(true)
         setWeather(initialState)
+        setNotFound(false)
 
         try{
             const geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${search.city},${search.country}&appid=${appid}`
@@ -53,8 +54,12 @@ export default function useWeather() {
                 setWeather(result)
             }
 
-        } catch (error){
-            console.log(error)
+        } catch (error: any){
+            console.log('Error al obtener clima: ',error)
+            if(error.response?.status === 404){
+                console.log('Clima no encontrado: ')
+                setNotFound(true)
+            }
         } finally {
             setLoading(false)
         }
@@ -65,6 +70,7 @@ export default function useWeather() {
     return{
         weather,
         loading,
+        notFound,
         fetchWeather,
         hasWeatherData
     }

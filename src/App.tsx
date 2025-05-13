@@ -3,9 +3,10 @@ import Form from "./components/Form/Form"
 import WeatherDetail from "./components/WeatherDetail/WeatherDetail"
 import Spinner from "./components/Spinner/Spinner"
 import useWeather from "./hooks/useWeather"
+import Alert from "./components/Alert/Alert"
 
 function App() {
-  const { weather, loading, fetchWeather, hasWeatherData } = useWeather()
+  const { weather, loading, notFound, fetchWeather, hasWeatherData } = useWeather()
 
   return (
     <>
@@ -21,6 +22,7 @@ function App() {
             weather={weather}
           />
         }
+        {notFound && <Alert>Ciudad No Encontrada</Alert>}
         
       </div>
     </>
