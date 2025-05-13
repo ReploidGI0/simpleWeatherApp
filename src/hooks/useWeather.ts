@@ -1,6 +1,19 @@
 import axios from "axios"
 import type { SearchType } from "../types"
+import { object, string, number, type InferOutput, parse } from 'valibot'
 
+//Valibot Schema
+const WeatherSchema = object({
+    name: string(),
+    main: object({
+        temp: number(),
+        temp_min: number(),
+        temp_max: number()
+    })
+})
+
+type Weather = InferOutput<typeof WeatherSchema>
+            
 export default function useWeather() {
     const fetchWeather = async (search: SearchType) => {
 
@@ -10,7 +23,18 @@ export default function useWeather() {
             const geoUrl = `https://api.openweathermap.org/data/2.5/weather?q=${search.city},${search.country}&appid=${appid}`
 
             const {data} = await axios(geoUrl)
-            console.log(data)
+
+            const lat = data.coord.lat
+            const lon = data.coord.lon
+            
+            const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${appid}`
+
+            //Valibot
+            const {data: weatherResult} = await axios<Weather>(weatherUrl)
+            const result = parse(WeatherSchema, weatherResult)
+            if(result){
+                console.log(result.name)
+            }
 
         } catch (error){
             console.log(error)
