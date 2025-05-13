@@ -1,6 +1,7 @@
 import styles from "./App.module.css"
 import Form from "./components/Form/Form"
 import WeatherDetail from "./components/WeatherDetail/WeatherDetail"
+import Spinner from "./components/Spinner/Spinner"
 import useWeather from "./hooks/useWeather"
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
         <Form 
           fetchWeather={fetchWeather}
         />
-        {loading && <p>Cargando...</p>}
+        {loading && <Spinner/>}
         {hasWeatherData &&
           <WeatherDetail
             weather={weather}
