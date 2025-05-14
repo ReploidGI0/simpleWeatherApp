@@ -31,7 +31,7 @@ export default function Form({fetchWeather} : FormProps) {
             setAlert('Todos los campos son obligatorios...')
             return
         }
-
+        setAlert('')
         fetchWeather(search)
     }
 
